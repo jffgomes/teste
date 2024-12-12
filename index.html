@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Genesys Client App</title>
+</head>
+<body>
+    <h1>Customer Information</h1>
+    <label id="conversationIdLabel">Conversation ID: <span id="conversationId"></span></label>
+    <pre id="output"></pre>
+
+    <script>
+            // Implicit grant credentials
+    const CLIENT_ID = '69693332-4588-40cd-9fc7-6f53b0f925ad';
+
+// Genesys Cloud environment
+const ENVIRONMENT = 'sae1.pure.cloud';
+
+function getParameterByName(name) {
+    name = name.replace(/[\\[]/, "\\[").replace(/[\]]/, "\\]");
+    var regex = new RegExp("[\\#&]" + name + "=([^&#]*)"),
+      results = regex.exec(location.hash);
+    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+}
+
+if(window.location.hash) {
+    console.log(location.hash);
+    var token = getParameterByName('access_token');
+
+
+    $.ajax({
+        url: `https://api.${ENVIRONMENT}/api/v2/users/me`,
+        type: "GET",
+        beforeSend: function(xhr){xhr.setRequestHeader('Authorization', 'bearer ' + token);},
+        success: function(data) {
+            console.log(data);
+        }
+    });
+
+    location.hash=''
+
+} else {
+
+    var queryStringData = {
+        response_type : "token",
+        client_id : CLIENT_ID,
+        redirect_uri : "https://easycomputer2.websiteseguro.com"
+    }
+
+    window.location.replace(`https://login.${ENVIRONMENT}/oauth/authorize?` + jQuery.param(queryStringData));
+}
+
+    </script>
+</body>
+</html>

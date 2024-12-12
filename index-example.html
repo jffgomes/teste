@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Genesys Client App</title>
+</head>
+<body>
+    <h1>Customer Information</h1>
+    <label id="conversationIdLabel">Conversation ID: <span id="conversationId"></span></label>
+    <pre id="output"></pre>
+
+    <script>
+        function getQueryParam(param) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+        }
+
+        function getHashParam(param) {
+            const hashParams = new URLSearchParams(window.location.hash.substring(1));
+            return hashParams.get(param);
+        }
+
+        function redirectToAuth(clientId, redirectUri) {
+            const authUrl = `https://login.sae1.pure.cloud/oauth/authorize?response_type=token&client_id=${encodeURIComponent(clientId)}&redirect_uri=${encodeURIComponent(redirectUri)}`;
+            window.location.href = authUrl;
+        }
+
+        async function getConversationDetails(conversationId, accessToken) {
+            const url = `https://api.sae1.pure.cloud/api/v2/analytics/conversations/${conversationId}/details`;
+            const headers = {
+                'Authorization': `Bearer ${accessToken}`,
+                'Accept': 'application/json'
+            };
+
+            try {
+                const response = await fetch(url, {
+                    method: 'GET',
+                    headers,
+                });
+                const result = await response.json();
+                return result;
+            } catch (error) {
+                console.error('Error fetching conversation details:', error);
+                throw error;
+            }
+        }
+
+        window.addEventListener('load', async () => {
+            const clientId = '69693332-4588-40cd-9fc7-6f53b0f925ad';
+            const conversationId = getQueryParam('conversationId');
+            const conversationIdLabel = document.getElementById('conversationId');
+            const output = document.getElementById('output');
+            const redirectUri = `https://login.mypurecloud.com/oauth/authorize?client_id=${clientId}&response_type=token&redirect_uri=https://easycomputer2.websiteseguro.com/index_Integration_o.html?conversationId=${conversationId}`;
+
+
+            if (!conversationId) {
+                output.textContent = 'Error: No conversation ID provided in the URL';
+                return;
+            }
+
+            conversationIdLabel.textContent = conversationId;
+            output.textContent = 'Loading...';
+
+            let accessToken = getHashParam('access_token');
+            if (!accessToken) {
+                redirectToAuth(clientId, redirectUri);
+                return;
+            }
+
+            try {
+                const conversationDetails = await getConversationDetails(conversationId, accessToken);
+                output.textContent = JSON.stringify(conversationDetails, null, 2);
+            } catch (error) {
+                output.textContent = `Error: ${error.message}`;
+            }
+        });
+    </script>
+</body>
+</html>
