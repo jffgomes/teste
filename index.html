@@ -9,6 +9,7 @@
 <body>
     <h1>Customer Information</h1>
     <label id="conversationIdLabel">Conversation ID: <span id="conversationId"></span></label>
+    <label id="userPhoneLabel">Telefone: <span id="userphone"></span></label>
     <pre id="output"></pre>
 
     <script>
@@ -74,6 +75,7 @@ async function getConversationDetails(conversationId, accessToken) {
                         const result = await response.json();
                         console.log(result)
                         conversationIdLabel.textContent = result["entities"][0]["id"]
+                        userPhoneLabel.textContent = result["entities"][0]["participants"][0]["address"]
                         output.textContent = JSON.stringify(result, null, 2);
                     }
                     catch (error) {
