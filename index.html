@@ -44,7 +44,7 @@ if(window.location.hash) {
     var queryStringData = {
         response_type : "token",
         client_id : CLIENT_ID,
-        redirect_uri : `https://jffgomes.github.io/teste/#conversationId=` //${conversationId}
+        redirect_uri : `https://jffgomes.github.io/teste/?conversationId=${conversationId}`
     }
 
     window.location.replace(`https://login.${ENVIRONMENT}/oauth/authorize?` + jQuery.param(queryStringData));
