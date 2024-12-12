@@ -15,7 +15,7 @@
             // Implicit grant credentials
     const CLIENT_ID = '69693332-4588-40cd-9fc7-6f53b0f925ad';
 
-// Genesys Cloud environment
+// Genesys Cloud environment https://login.sae1.pure.cloud/oauth/authorize
 const ENVIRONMENT = 'sae1.pure.cloud';
 
 function getParameterByName(name) {
@@ -48,8 +48,8 @@ if(window.location.hash) {
         client_id : CLIENT_ID,
         redirect_uri : "https://jffgomes.github.io/teste"
     }
-////////
-    // window.location.replace(`https://login.${ENVIRONMENT}/oauth/authorize?` + jQuery.param(queryStringData));
+
+    window.location.replace(`https://login.${ENVIRONMENT}/oauth/authorize?` + jQuery.param(queryStringData));
 }
 
     </script>
