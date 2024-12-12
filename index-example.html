@@ -49,10 +49,10 @@
         window.addEventListener('load', async () => {
             const clientId = '69693332-4588-40cd-9fc7-6f53b0f925ad';
             const conversationId = getQueryParam('conversationId');
-            const conversationIdLabel = document.getElementById('conversationId');
-            const output = document.getElementById('output');
             const redirectUri = `https://login.mypurecloud.com/oauth/authorize?client_id=${clientId}&response_type=token&redirect_uri=https://easycomputer2.websiteseguro.com/index_Integration_o.html?conversationId=${conversationId}`;
 
+            const conversationIdLabel = document.getElementById('conversationId');
+            const output = document.getElementById('output');
 
             if (!conversationId) {
                 output.textContent = 'Error: No conversation ID provided in the URL';
@@ -62,17 +62,19 @@
             conversationIdLabel.textContent = conversationId;
             output.textContent = 'Loading...';
 
-            let accessToken = getHashParam('access_token');
-            if (!accessToken) {
-                redirectToAuth(clientId, redirectUri);
-                return;
-            }
 
             try {
                 const conversationDetails = await getConversationDetails(conversationId, accessToken);
                 output.textContent = JSON.stringify(conversationDetails, null, 2);
             } catch (error) {
                 output.textContent = `Error: ${error.message}`;
+            }
+
+            
+            let accessToken = getHashParam('access_token');
+            if (!accessToken) {
+                redirectToAuth(clientId, redirectUri);
+                return;
             }
         });
     </script>

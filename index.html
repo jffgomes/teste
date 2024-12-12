@@ -28,16 +28,10 @@ function getParameterByName(name) {
 if(window.location.hash) {
     console.log(location.hash);
     var token = getParameterByName('access_token');
+    var conversationId = getParameterByName('conversationId')
 
 
-    $.ajax({
-        url: `https://api.${ENVIRONMENT}/api/v2/users/me`,
-        type: "GET",
-        beforeSend: function(xhr){xhr.setRequestHeader('Authorization', 'bearer ' + token);},
-        success: function(data) {
-            console.log(data);
-        }
-    });
+    getConversationDetails(conversationId, token)
 
     location.hash=''
 
@@ -51,6 +45,44 @@ if(window.location.hash) {
 
     window.location.replace(`https://login.${ENVIRONMENT}/oauth/authorize?` + jQuery.param(queryStringData));
 }
+
+async function getConversationDetails(conversationId, accessToken) {
+            const url = `https://api.sae1.pure.cloud/api/v2/analytics/conversations/${conversationId}/details`;
+            const headers = {
+                'Authorization': `Bearer ${accessToken}`,
+                'Accept': 'application/json'
+            };
+
+            const conversationIdLabel = document.getElementById('conversationId');
+            const output = document.getElementById('output');
+
+            if (!conversationId) {
+                output.textContent = 'Error: No conversation ID provided in the URL';
+                return;
+            } else {
+
+                try {
+                    try {
+                        const response = await fetch(url, {
+                            method: 'GET',
+                            headers,
+                        });
+                        const result = await response.json();
+
+                        output.textContent = JSON.stringify(result, null, 2);
+                    }
+                    catch (error) {
+                        output.textContent = `Error: ${error.message}`;
+                    }
+
+                    // return result;
+                } catch (error) {
+                    console.error('Error fetching conversation details:', error);
+                    throw error;
+                }
+            }
+        }
+    
 
     </script>
 </body>
