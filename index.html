@@ -77,14 +77,14 @@ async function getConversationDetails(conversationId, accessToken) {
                         console.log(result)
                         conversationIdLabel.textContent = result["entities"][0]["id"]
                         for (let index = 0; index < result["entities"][0]["participants"].length; index++) {
-                            const element = array[index];
+                            const element = result["entities"][0]["participants"][index];
                             if (element["purpose"] == "customer") {
                                 userPhoneLabel.textContent = element["address"]
                             }
                         }
 
                         for (let index = 0; index < result["entities"][0]["participants"].length; index++) {
-                            const element = array[index];
+                            const element = result["entities"][0]["participants"][index];
                             if (element["purpose"] == "acd") {
                                 queueLabel.textContent = element["name"]
                             }
