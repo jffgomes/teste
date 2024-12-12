@@ -12,11 +12,10 @@
     <pre id="output"></pre>
 
     <script>
-            // Implicit grant credentials
     const CLIENT_ID = '69693332-4588-40cd-9fc7-6f53b0f925ad';
 
-// Genesys Cloud environment https://login.sae1.pure.cloud/oauth/authorize
-const ENVIRONMENT = 'sae1.pure.cloud';
+    // Genesys Cloud environment https://login.sae1.pure.cloud/oauth/authorize
+    const ENVIRONMENT = 'sae1.pure.cloud';
 
 function getParameterByName(name) {
     name = name.replace(/[\\[]/, "\\[").replace(/[\]]/, "\\]");
@@ -25,7 +24,12 @@ function getParameterByName(name) {
     return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
 }
 
-var conversationId = getParameterByName('conversationId')
+function getQueryParam(param) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+        }
+
+var conversationId = getQueryParam('conversationId')
 
 if(window.location.hash) {
     console.log(location.hash);
@@ -40,7 +44,7 @@ if(window.location.hash) {
     var queryStringData = {
         response_type : "token",
         client_id : CLIENT_ID,
-        redirect_uri : `https://jffgomes.github.io/teste/?conversationId=` //${conversationId}
+        redirect_uri : `https://jffgomes.github.io/teste/#conversationId=` //${conversationId}
     }
 
     window.location.replace(`https://login.${ENVIRONMENT}/oauth/authorize?` + jQuery.param(queryStringData));
