@@ -51,7 +51,7 @@ if(window.location.hash) {
 }
 
 async function getConversationDetails(conversationId, accessToken) {
-            const url = `https://api.sae1.pure.cloud/api/v2/analytics/conversations/${conversationId}/details`;
+            const url = `https://api.sae1.pure.cloud/api/v2/conversations`;
             const headers = {
                 'Authorization': `Bearer ${accessToken}`,
                 'Accept': 'application/json'
@@ -60,10 +60,10 @@ async function getConversationDetails(conversationId, accessToken) {
             const conversationIdLabel = document.getElementById('conversationId');
             const output = document.getElementById('output');
 
-            if (!conversationId) {
-                output.textContent = 'Error: No conversation ID provided in the URL';
-                return;
-            } else {
+            // if (!conversationId) {
+            //     output.textContent = 'Error: No conversation ID provided in the URL';
+            //     return;
+            // } else {
 
                 try {
                     try {
@@ -72,7 +72,7 @@ async function getConversationDetails(conversationId, accessToken) {
                             headers,
                         });
                         const result = await response.json();
-
+                        console.log(result)
                         output.textContent = JSON.stringify(result, null, 2);
                     }
                     catch (error) {
@@ -85,7 +85,7 @@ async function getConversationDetails(conversationId, accessToken) {
                     throw error;
                 }
             }
-        }
+        // }
     
 
     </script>
